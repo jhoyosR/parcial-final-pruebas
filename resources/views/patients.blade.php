@@ -17,11 +17,11 @@
             </div>
             <div class="mb-3">
                 <label for="patientEmail" class="form-label">Email</label>
-                <input type="email" id="patientEmail" class="form-control" required>
+                <input type="text" id="patientEmail" class="form-control" required>
             </div>
             <div class="mb-3">
                 <label for="patientPhone" class="form-label">Teléfono</label>
-                <input type="tel" id="patientPhone" class="form-control" required minlength="7">
+                <input type="tel" id="patientPhone" class="form-control">
             </div>
             <button type="submit" class="btn btn-success">Registrar Paciente</button>
         </form>
