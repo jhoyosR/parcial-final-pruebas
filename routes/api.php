@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PatientController;
+use App\Http\Controllers\AppointmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +19,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/patients', [PatientController::class, 'store']);
+Route::post('/appointments', [AppointmentController::class, 'store']);
+Route::get('/appointments', [AppointmentController::class, 'index']);
+Route::delete('/appointments/{id}', [AppointmentController::class, 'cancel']);
