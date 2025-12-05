@@ -39,7 +39,7 @@ class AppointmentController extends Controller {
     public function index() {
         return $this->successResponse(
             'Listado de citas',
-            $this->appointmentrepository->makeModel()->where('status','scheduled')->get()
+            $this->appointmentrepository->makeModel()->with('patient')->where('status','scheduled')->get()
         );
     }
 

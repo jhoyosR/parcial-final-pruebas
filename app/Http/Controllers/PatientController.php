@@ -11,6 +11,13 @@ class PatientController extends Controller {
 
     }
 
+    public function index() {
+        return $this->successResponse(
+            'Lista de pacientes', 
+            $this->patientRepository->all()
+        );
+    }
+
     public function store(Request $request){
         $validated = $request->validate([
             'name'  => 'required',
@@ -20,6 +27,6 @@ class PatientController extends Controller {
 
         $patient = $this->patientRepository->create($validated);
 
-        return $this->successResponse('Patient registered successfully', $patient);
+        return $this->successResponse('Paciente registrado exitosamente', $patient);
     }
 }
