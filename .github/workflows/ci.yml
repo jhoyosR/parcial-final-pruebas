@@ -1,0 +1,73 @@
+name: Laravel Sail CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  laravel-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --no-interaction --prefer-dist
+        
+      - name: Configure .env for Sail CI
+        run: |
+          cp .env.example .env
+          sed -i '/DB_HOST=/c\DB_HOST=mysql' .env
+          echo "APP_ENV=testing" >> .env
+          echo "DB_DATABASE=testing" >> .env
+          echo "DB_USERNAME=sail" >> .env
+          echo "DB_PASSWORD=password" >> .env
+
+      - name: Start Sail Services
+        run: ./vendor/bin/sail up -d
+        timeout-minutes: 5
+        
+      - name: Wait for services to be healthy
+        run: |
+          echo "Waiting for Sail services..."
+          sleep 10
+
+      - name: Generate App Key and Run Migrations
+        run: |
+          ./vendor/bin/sail artisan key:generate
+          ./vendor/bin/sail artisan migrate --force
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Node dependencies
+        run: npm install
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Start Laravel test server (host)
+        run: php artisan serve --port=8000 &
+        
+      - name: Wait for server to boot
+        run: npx wait-on http://localhost:8000
+
+      - name: Run Playwright tests
+        run: npx playwright test
+        
+      - name: Stop Sail Services
+        if: always()
+        run: ./vendor/bin/sail down
+
+      - name: ALL OK
+        if: success()
+        run: echo "OK!"
+        
+      - name: FAILED
+        if: failure()
+        run: echo "Pipeline Failed!"
