@@ -7,6 +7,14 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+| ID | Caso de Prueba                               | Tipo de Prueba                              | Justificación                                                                                                                                                     |
+|----|-----------------------------------------------|-----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1  | Validación de Errores al Registrar Paciente   | Partición de Equivalencia (Datos Inválidos)   | Verifica que el backend (Laravel) rechace datos inválidos (email con formato incorrecto y phone muy corto), asegurando que la API impone las reglas de negocio, incluso si el frontend falla. |
+| 2  | Flujo Completo Exitoso           | Integración de Flujo                          | Asegura que la secuencia completa funcione: Registro de Paciente → Carga en el Selector → Agendamiento de Cita. Confirma que todos los componentes (API y Frontend) se comunican correctamente. |
+| 3  | Validación de Solapamiento de Horario         | Regla de Negocio Crítica                      | Prueba que la lógica de negocio prohíbe agendar dos citas con el mismo doctor y a la misma hora (appointmentTimeOverlap), previniendo conflictos de agenda.         |
+| 4  | Cancelación de Cita                           | Flujo Inverso                                 | Verifica la capacidad del sistema para revertir una acción. Confirma que la cita desaparece del listado de citas activas (scheduled) después de la cancelación exitosa. |
+
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
